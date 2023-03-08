@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
+// Mongo Atlas User password:
+//tGhN7C19mxgiJ3f9
+
 @Injectable({
   providedIn: 'root'
 })
