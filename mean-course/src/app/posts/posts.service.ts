@@ -1,6 +1,6 @@
 import { Post } from './post.model';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { map, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 // Mongo Atlas User password:
@@ -19,9 +19,18 @@ export class PostsService {
   }
 
   getPosts(){
-    this.http.get<{message: string, posts: Post[]}>('http://localhost:3000/api/posts')
-    .subscribe((postData)=>{
-      this.posts = postData.posts
+    this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts')
+    .pipe(map((postsData)=>{
+      return postsData.posts.map(post=> {
+        return {
+          title:post.title,
+          content: post.content,
+          id: post._id
+        }
+      })
+    }))
+    .subscribe((transformedPosts)=>{
+      this.posts = transformedPosts
       this.postsUpdated.next([...this.posts]);
     });
   }
@@ -40,4 +49,15 @@ export class PostsService {
     })
   }
 
+  deletePost(postId: string){
+    this.http.delete("http://localhost:3000/api/posts/" + postId)
+    .subscribe(()=>{
+      const updatedPosts = this.posts.filter(post => post.id !== postId)
+      this.posts = updatedPosts;
+      this.postsUpdated.next([...this.posts])
+    })
+  }
+
 }
+
+// mongosh "mongodb+srv://cluster0.ia3rj3r.mongodb.net/AWESOME" --apiVersion 1 --username kareemyasserr
