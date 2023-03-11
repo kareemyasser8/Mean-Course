@@ -3,9 +3,6 @@ import { Injectable } from '@angular/core';
 import { map, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-// Mongo Atlas User password:
-//tGhN7C19mxgiJ3f9
-
 @Injectable({
   providedIn: 'root'
 })
@@ -60,4 +57,3 @@ export class PostsService {
 
 }
 
-// mongosh "mongodb+srv://cluster0.ia3rj3r.mongodb.net/AWESOME" --apiVersion 1 --username kareemyasserr
