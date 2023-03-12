@@ -17,16 +17,21 @@ export class PostsService {
   }
 
   getPosts() {
-    this.http.get<{ message: string, posts: any }>('http://localhost:3000/api/posts')
-      .pipe(map((postsData) => {
-        return postsData.posts.map(post => {
-          return {
-            title: post.title,
-            content: post.content,
-            id: post._id
-          }
+    this.http
+      .get<{ message: string, posts: any }>('http://localhost:3000/api/posts')
+      .pipe(
+        map(postsData => {
+          console.log(postsData);
+          return postsData.posts.documents.map((post) => {
+            return {
+              title: post.title,
+              content: post.content,
+              id: post._id,
+              imagePath: post.imagePath,
+            }
+          })
         })
-      }))
+      )
       .subscribe((transformedPosts) => {
         this.posts = transformedPosts
         this.postsUpdated.next([...this.posts]);
@@ -46,12 +51,13 @@ export class PostsService {
     postData.append("title", title)
     postData.append("content", content)
     postData.append("image", image, title)
-    this.http.post<{ message: string; postId: string }>('http://localhost:3000/api/posts', postData)
+    this.http.post<{ message: string; post: Post }>('http://localhost:3000/api/posts', postData)
       .subscribe((response) => {
         const post: Post = {
-          id: response.postId,
+          id: response.post.id,
           title: title,
-          content: content
+          content: content,
+          imagePath: response.post.imagePath
         }
         this.posts.push(post);
         this.postsUpdated.next([...this.posts])
@@ -59,11 +65,12 @@ export class PostsService {
       })
   }
 
-  updatePost(id: string, title: string, content: string) {
+  updatePost(id: string, title: string, content: string,) {
     const post: Post = {
       id: id,
       title: title,
-      content: content
+      content: content,
+      imagePath: null
     }
 
     this.http.put("http://localhost:3000/api/posts/" + id, post)
