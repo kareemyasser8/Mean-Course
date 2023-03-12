@@ -17,7 +17,11 @@ mat-spinner{
 }
 
 .post-image img{
-  width:100%;
+  width:40%;
   border-radius: 5px;
+}
+
+mat-paginator{
+  margin-top: 1rem;
 }
 
