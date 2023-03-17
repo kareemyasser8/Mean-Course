@@ -60,10 +60,14 @@ router.put('/:id',checkAuth, multer({ storage: storage }).single("image"), (req,
     content: req.body.content,
     imagePath: imagePath
   })
-  Post.updateOne({ _id: req.params.id }, post).then(
+  Post.updateOne({ _id: req.params.id, creator: req.userData.userId}, post).then(
     result => {
-      console.log(result);
-      res.status(200).json({ message: "update successful" })
+      if(result.nModified > 0){
+        res.status(200).json({ message: "update successful" })
+      }else{
+        res.status(401).json({ message: "not authorized" })
+      }
+
     }
   ).catch(err => console.log(err.message))
 })
@@ -123,9 +127,12 @@ router.delete('/:id',checkAuth, async (req, res, next) => {
 
   // res.status(200).send(post).message('Post deleted by Mosh Hamedani method!!')
 
-  Post.deleteOne({ _id: req.params.id }).then(result => {
-    console.log(result)
-    res.status(200).json({ message: 'Post Deleted.' })
+  Post.deleteOne({ _id: req.params.id, creator: req.userData.userId }).then(result => {
+    if(result.deletedCount > 0){
+      res.status(200).json({ message: "deletion successful" })
+    }else{
+      res.status(401).json({ message: "not authorized" })
+    }
   })
 
 })
