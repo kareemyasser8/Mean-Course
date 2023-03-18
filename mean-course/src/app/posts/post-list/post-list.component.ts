@@ -22,7 +22,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   postsPerPage = 2;
   pageSizeOptions = [1, 2, 5, 10];
   currentPage = 1;
-  userId : string;
+  userId: string;
 
   userIsAuthenticated: boolean = false;
   private authStatusSub: Subscription;
@@ -63,8 +63,13 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   onDelete(postId: string) {
     this.isLoading = true;
-    this.postService.deletePost(postId).subscribe(() => {
-      this.postService.getPosts(this.postsPerPage, this.currentPage)
+    this.postService.deletePost(postId).subscribe({
+      next: () => {
+        this.postService.getPosts(this.postsPerPage, this.currentPage)
+      },
+      error: ()=> {
+        this.isLoading = false;
+      }
     })
   }
 
