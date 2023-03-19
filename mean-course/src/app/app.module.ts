@@ -1,4 +1,3 @@
-import { AuthModule } from './auth/auth.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -27,7 +26,7 @@ import { PostsModule } from './posts/posts.module';
     HttpClientModule,
     AngularMaterialModule,
     PostsModule,
-    AuthModule,
+
 
   ],
   providers: [
