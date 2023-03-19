@@ -42,7 +42,7 @@ exports.userLogin =  (req,res,next)=>{
   ).then(
     result=>{
       if(!result) return res.status(404).json({message: "Invalid Authentication credintials!"})
-      const token = jwt.sign({email: fetchedUser.email, userId: fetchedUser._id}, 'secret_this_should_be_longer',
+      const token = jwt.sign({email: fetchedUser.email, userId: fetchedUser._id}, process.env.JWT_KEY,
       {expiresIn: '1h'})
       res.status(200).json({token: token, expiresIn: 3600, userId: fetchedUser._id});
     }
