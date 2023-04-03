@@ -1,5 +1,6 @@
 const path = require('path')
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 
@@ -33,6 +34,15 @@ app.use((req, res, next) => {
 
 app.use("/api/posts", postsRoutes);
 app.use("/api/user", userRoutes);
+
+// Enable CORS for all routes
+app.use(cors());
+
+app.use(
+  cors({
+    origin: 'https://mean-course-o4sudvjzx-kareemyasser8.vercel.app', // Replace with your allowed client-side domain
+  })
+);
 
 
 module.exports = app;
